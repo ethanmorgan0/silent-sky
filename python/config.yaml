@@ -1,0 +1,19 @@
+environment:
+  num_sectors: 8
+  episode_length: 100
+  initial_budget: 1000.0
+  seed: null  # Random if null
+
+unity:
+  enabled: false
+  pub_port: 5555
+  rep_port: 5556
+
+agent:
+  type: dummy
+  dummy_strategy: greedy  # or round_robin, hybrid
+
+logging:
+  episode_dir: data/episodes
+  log_level: INFO
+

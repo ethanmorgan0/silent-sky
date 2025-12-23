@@ -98,6 +98,7 @@ ipython_config.py
 #   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
 #   This is especially recommended for binary packages to ensure reproducibility, and is more
 #   commonly ignored for libraries.
+# Uncomment the line below if you want to ignore uv.lock (not recommended for applications)
 #uv.lock
 
 # poetry
@@ -143,6 +144,11 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# uv
+.venv/
+uv.lock  # Uncomment if you want to ignore lock file (not recommended)
+.python-version
 
 # Spyder project settings
 .spyderproject
@@ -205,3 +211,28 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Unity
+unity/**/Library/
+unity/**/Temp/
+unity/**/Obj/
+unity/**/Logs/
+unity/**/UserSettings/
+unity/**/*.csproj
+unity/**/*.sln
+unity/**/*.suo
+unity/**/*.user
+unity/**/*.userprefs
+unity/**/*.pidb
+unity/**/*.booproj
+unity/**/*.svd
+unity/**/*.pdb
+unity/**/*.mdb
+unity/**/*.opendb
+unity/**/*.VC.db
+unity/**/Assets/AssetStoreTools*
+unity/**/ProjectSettings/ProjectVersion.txt
+
+# Episode data
+data/episodes/*.json
+data/episodes/*.pkl
