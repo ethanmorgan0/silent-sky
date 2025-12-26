@@ -21,7 +21,7 @@ This is a **game first**, not just an RL project. The core fantasy is operating 
 
 ### The Setup
 
-- **8 sky sectors** to observe
+- **19 sky sectors** to observe (arranged in JWST-style hexagonal honeycomb pattern: 1 center + 6 in ring 1 + 12 in ring 2)
 - **3 event types**: Noise (frequent, low value), Minor Transients (moderate), Major Transients (rare, high value)
 - **One orbital cycle per episode** (fixed horizon, ~100 steps)
 - **Partial observability**: Agent only sees noisy sensor readings, never ground truth
@@ -113,6 +113,42 @@ Events follow procedural patterns that the agent can learn:
   - "Sector activity forecast": Shows which sectors are likely hot (with uncertainty)
   - "Temporal predictions": Warns when major events are likely (with uncertainty)
 - Upgrades reduce but never eliminate uncertainty
+
+### Future Design: Event Type Differentiation & Temporal Structure
+
+**Design Note (For Future Implementation):**
+
+The policy system should be reactive to different event types with distinct characteristics:
+
+**Temporal Structure:**
+- Shortened in-game year cycle: ~20 nights/year (creates scarcity and makes each night more valuable)
+- Each episode represents one year of observations
+
+**Event Type Characteristics:**
+
+1. **Nebulas** (Constant, Low Risk/Low Value)
+   - Observable every night (constant presence)
+   - Lower value, low risk
+   - Provides baseline income stream
+   - Agent can "rely on" these for steady revenue
+
+2. **Comets** (Cyclical, Consistent)
+   - Predictable timing patterns (cyclical)
+   - Consistent appearance windows
+   - Agent can learn and anticipate cycles
+   - Creates strategic planning opportunities
+
+3. **Supernovae** (Random, High Value)
+   - Random occurrence (unpredictable)
+   - Very high value when discovered
+   - High risk/high reward tradeoff
+   - Creates exciting "jackpot" moments
+
+**Policy Implications:**
+- Agent should develop different strategies for each event type
+- Risk/reward tradeoffs vary by event type
+- Temporal structure (20 nights/year) increases opportunity cost of each decision
+- Agent must balance: steady income (nebulas) vs. predictable opportunities (comets) vs. high-risk gambles (supernovae)
 
 ## Technical Architecture
 

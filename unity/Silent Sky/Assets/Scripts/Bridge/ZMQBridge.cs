@@ -246,6 +246,8 @@ namespace SilentSky.Unity.Bridge
     // Mock data generator for testing
     public static class MockDataGenerator
     {
+        private const int NUM_SECTORS = 19;
+        
         // Keep track of all events across steps (accumulate)
         private static List<EventData> allEventsHistory = new List<EventData>();
         private static List<EventData> discoveredEventsHistory = new List<EventData>();
@@ -256,8 +258,8 @@ namespace SilentSky.Unity.Bridge
         
         public static EnvironmentState GenerateMockState(int step)
         {
-            var sectors = new SectorData[8];
-            for (int i = 0; i < 8; i++)
+            var sectors = new SectorData[NUM_SECTORS];
+            for (int i = 0; i < NUM_SECTORS; i++)
             {
                 float rand = UnityEngine.Random.value;
                 float sensorReading;
@@ -316,7 +318,7 @@ namespace SilentSky.Unity.Bridge
                 // Sometimes pick randomly for exploration
                 if (UnityEngine.Random.value < 0.3f)
                 {
-                    currentObservingSector = UnityEngine.Random.Range(0, 8);
+                    currentObservingSector = UnityEngine.Random.Range(0, NUM_SECTORS);
                 }
                 else
                 {
@@ -328,7 +330,7 @@ namespace SilentSky.Unity.Bridge
             // Generate new events every few steps
             if (step > 0 && step % 5 == 0)
             {
-                int eventSector = UnityEngine.Random.Range(0, 8);
+                int eventSector = UnityEngine.Random.Range(0, NUM_SECTORS);
                 var newEvent = new EventData
                 {
                     event_type = "nova",
@@ -369,6 +371,15 @@ namespace SilentSky.Unity.Bridge
             var allEvents = new List<EventData>(allEventsHistory);
             var discoveredEvents = new List<EventData>(discoveredEventsHistory);
             
+            // Populate observation arrays from sector data
+            float[] sensorReadings = new float[NUM_SECTORS];
+            float[] sensorConfidences = new float[NUM_SECTORS];
+            for (int i = 0; i < NUM_SECTORS && i < sectors.Length; i++)
+            {
+                sensorReadings[i] = sectors[i].sensor_reading;
+                sensorConfidences[i] = sectors[i].sensor_confidence;
+            }
+            
             return new EnvironmentState
             {
                 schema_version = 1,
@@ -386,8 +397,8 @@ namespace SilentSky.Unity.Bridge
                 },
                 observation = new ObservationData
                 {
-                    sensor_readings = new float[8],
-                    sensor_confidence = new float[8],
+                    sensor_readings = sensorReadings,
+                    sensor_confidence = sensorConfidences,
                     time_remaining = new float[] { Mathf.Max(0f, 1f - (step / 1000f)) },
                     budget_remaining = new float[] { (1000f - step * 10f) / 10000f }
                 },
@@ -398,8 +409,8 @@ namespace SilentSky.Unity.Bridge
                     total_earnings = step * 50f,
                     total_costs = step * 10f,
                     profit = step * 40f,
-                    events_discovered = step / 10,
-                    events_total = step / 5
+                    events_discovered = discoveredEvents.Count,
+                    events_total = allEvents.Count
                 }
             };
         }

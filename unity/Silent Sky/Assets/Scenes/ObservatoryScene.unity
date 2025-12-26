@@ -372,7 +372,7 @@ MonoBehaviour:
   useMockData: 1
   pubAddress: tcp://localhost:5555
   repAddress: tcp://localhost:5556
-  mockUpdateInterval: 0.1
+  mockUpdateInterval: 2
 --- !u!4 &707305624
 Transform:
   m_ObjectHideFlags: 0
@@ -383,6 +383,109 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &711526383
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 711526385}
+  - component: {fileID: 711526384}
+  m_Layer: 0
+  m_Name: UpgradeShop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &711526384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711526383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcbf9876843401c49a8fb7c19963d229, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SilentSky.Unity.Mission.UpgradeShop
+  sensorQualityButton: {fileID: 0}
+  fieldOfViewButton: {fileID: 0}
+  reactionSpeedButton: {fileID: 0}
+  predictionHintsButton: {fileID: 0}
+  budgetText: {fileID: 0}
+  upgradeStatusTexts: []
+  autoCreateUI: 1
+  panelPosition: {x: 10, y: 200}
+--- !u!4 &711526385
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711526383}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.66615, y: -1.13209, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1057706844
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1057706846}
+  - component: {fileID: 1057706845}
+  m_Layer: 0
+  m_Name: MissionDirectives
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1057706845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1057706844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d63e0e190c9eb74dadda4cb057feff0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SilentSky.Unity.Mission.MissionDirectives
+  riskToleranceSlider: {fileID: 0}
+  explorationBiasSlider: {fileID: 0}
+  efficiencyFocusSlider: {fileID: 0}
+  budgetLimitSlider: {fileID: 0}
+  sectorPriorityToggles: []
+  autoCreateUI: 1
+  panelPosition: {x: -10, y: -10}
+--- !u!4 &1057706846
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1057706844}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.66615, y: -1.13209, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -421,6 +524,8 @@ MonoBehaviour:
   eventItemPrefab: {fileID: 0}
   discoveredCountText: {fileID: 0}
   missedCountText: {fileID: 0}
+  autoCreateUI: 1
+  panelPosition: {x: -200, y: 200}
 --- !u!4 &1269668783
 Transform:
   m_ObjectHideFlags: 0
@@ -624,6 +729,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1594188452
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1594188454}
+  - component: {fileID: 1594188453}
+  m_Layer: 0
+  m_Name: AgentStateUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1594188453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1594188452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dc6bf654286b0a43865a87b662bedd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SilentSky.Unity.Visualization.AgentStateUI
+  timestepText: {fileID: 0}
+  timeRemainingText: {fileID: 0}
+  currentActionText: {fileID: 0}
+  timeRemainingSlider: {fileID: 0}
+  budgetSlider: {fileID: 0}
+  autoCreateUI: 1
+  panelPosition: {x: 0, y: -10}
+--- !u!4 &1594188454
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1594188452}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.66615, y: -1.13209, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2042550165
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,6 +859,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2088899220
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2088899222}
+  - component: {fileID: 2088899221}
+  m_Layer: 0
+  m_Name: BudgetUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2088899221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088899220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee09c0b1ec0933348991242dc91704e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SilentSky.Unity.Finance.BudgetUI
+  budgetText: {fileID: 0}
+  earningsText: {fileID: 0}
+  costsText: {fileID: 0}
+  profitText: {fileID: 0}
+  budgetSlider: {fileID: 0}
+  autoCreateUI: 1
+  panelPosition: {x: 10, y: -10}
+--- !u!4 &2088899222
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088899220}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.66615, y: -1.13209, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -712,5 +919,9 @@ SceneRoots:
   - {fileID: 707305624}
   - {fileID: 1439369557}
   - {fileID: 1269668783}
+  - {fileID: 1594188454}
+  - {fileID: 2088899222}
+  - {fileID: 1057706846}
+  - {fileID: 711526385}
   - {fileID: 1322598715}
   - {fileID: 2042550168}

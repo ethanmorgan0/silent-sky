@@ -29,7 +29,7 @@ def get_default_config() -> Dict[str, Any]:
     """Get default configuration"""
     return {
         "environment": {
-            "num_sectors": 8,
+            "num_sectors": 19,
             "episode_length": 100,
             "initial_budget": 1000.0,
             "seed": None

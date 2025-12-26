@@ -22,13 +22,15 @@ Create an empty GameObject to hold the sectors:
 6. Set all margins to 0
 
 ### 3. Sector Prefab Setup
-Create a prefab for individual sectors:
+Create a prefab for individual sectors (hexagonal shape, JWST-style):
 
 #### Option A: Simple Setup (Recommended for MVP)
 1. Right-click in Hierarchy → **UI → Image**
 2. Name it `SectorPrefab`
 3. Set Image color to white (or any default color)
 4. Set RectTransform size to **100x100** (or your preferred size)
+   - Note: The hexagon sprite will be generated automatically by `HexagonSpriteGenerator`
+   - The Image component's sprite will be set programmatically to a hexagon shape
 5. Add a **Text** component as a child:
    - Right-click `SectorPrefab` → **UI → Text - TextMeshPro** (or **UI → Legacy → Text**)
    - Name it `LabelText`
@@ -73,8 +75,8 @@ Create a prefab for individual sectors:
 4. In Inspector:
    - Drag `SectorContainer` (from step 2) to `Sector Container` field
    - Drag `SectorPrefab` (the prefab you created) to `Sector Prefab` field
-   - Set `Radius` to `200` (adjust for your canvas size)
-   - ✅ Check `Use Circular Layout`
+   - Set `Hex Size` to `80` (size of each hexagon, adjust for your canvas)
+   - ✅ Check `Use Hexagonal Layout` (default, creates JWST-style honeycomb pattern)
 
 ## Quick Setup Checklist
 
@@ -99,9 +101,10 @@ Create a prefab for individual sectors:
    - "ZMQBridge: Generating mock state step X"
    - No errors about missing components
 3. You should see:
-   - 8 sectors arranged in a circle
-   - Sectors changing color (green = high confidence, red = low confidence)
-   - Numbers updating in the reading text
+   - 18 hexagonal sectors arranged in a JWST-style honeycomb pattern
+   - Sectors changing color (green = high confidence, yellow = ambiguous, dark = low info)
+   - Numbers updating in the reading text (likelihood percentages)
+   - Cyan border on the currently observed sector
 
 ## Troubleshooting
 
