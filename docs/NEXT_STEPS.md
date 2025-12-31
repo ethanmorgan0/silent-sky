@@ -2,114 +2,105 @@
 
 ## Current Status ✅
 
+**Architecture:** Unity ML-Agents (Unity is authoritative, Python for training only)
+
 **Completed:**
 - ✅ Event-to-hexagon mapping fixed (cross product sign bug resolved)
-- ✅ Visual debugging tools (HexagonMappingDebugger)
+- ✅ Visual debugging tools (HexagonMappingDebugger, SphericalCoordinateDebugger)
 - ✅ Environment visualization working (events, signals, hexagons)
 - ✅ Coordinate system unified (Sphere → Viewport → Hexagon)
-- ✅ Python environment structure exists (events, sensors, rewards, state)
+- ✅ Unity world model foundation (FakeDataGenerator, SignalCalculator, SpaceEvent)
 - ✅ Unity visualization components (SectorMap, EventVisualizer, StarfieldBackground)
+- ✅ Viewport rotation system (functional but has bugs)
+- ✅ 19 hexagons in JWST honeycomb pattern
+- ✅ Spherical coordinate system with two-step mapping
 
 **Working:**
 - Events generate and map correctly to hexagons
 - Signals calculate and display properly
 - Visual debugging tools available
+- Viewport rotation works (but has theta jumping and phi clamping issues)
+
+**Not Yet Implemented:**
+- ML-Agents integration (next major milestone)
+- Event type differentiation (Nebulas, Comets, Supernovae)
+- Noisy sensor system (currently using ground truth)
+- Python training connection
 
 ## Recommended Next Steps
 
-### 1. Sphere Rotation (High Priority) 🌐
+### 1. Fix Viewport Rotation Bugs (High Priority) 🔧
 
-**Goal:** Add ability to rotate the viewport/camera around the sphere to observe different regions.
+**Goal:** Fix theta jumping at 0/2π boundary and refine phi clamping behavior.
+
+**Current Status:**
+- ✅ Rotation system implemented (ViewportRotationController, ViewportProjection)
+- ⚠️ Theta jumping: Horizontal snapping at 0/2π boundary
+- ⚠️ Phi clamping: Vertical movement clamped, may need refinement
 
 **Why:** 
-- Enables strategic gameplay (choosing which part of sky to observe)
-- Aligns with design vision (360-degree sphere, field of view)
-- Creates meaningful tradeoffs (can't see everything at once)
+- Rotation is functional but buggy
+- Needs to be smooth and continuous for good UX
+- Foundation for future gameplay (choosing which part of sky to observe)
 
 **Implementation:**
-- **Unity Side:**
-  - Add rotation controls (keyboard/mouse input)
-  - Update `ViewportProjection` to accept rotation offset (theta_offset, phi_offset)
-  - Rotate the FOV window around the sphere
-  - Update hexagon mapping to account for rotation
-  - Visual feedback showing current viewport orientation
-  
-- **Python Side:**
-  - Add viewport rotation state to environment
-  - Make rotation an agent action (or player control)
-  - Update observation space to reflect rotated viewport
-  - Consider: Is rotation an agent action or player-only control?
+- Fix delta calculation in UpdateRotation for theta
+- Improve smooth rotation interpolation
+- Refine phi clamping behavior (or implement proper pole handling)
+- Test continuous rotation in both directions
 
-**Design Questions:**
-- Should rotation be continuous or discrete (snap to hexagon centers)?
-- Should rotation cost resources (time/money)?
-- Should agent control rotation, or is it player-only?
-- How does rotation interact with upgrades (wider FOV)?
+**Estimated Effort:** Medium (1-2 days)
 
-**Estimated Effort:** Medium (2-3 days)
+**Note:** Rotation is implemented but needs bug fixes. See `docs/ROTATION_DEBUG_ANALYSIS.md`.
 
 ---
 
 ### 2. Event Type Differentiation (High Priority) ⭐
 
-**Goal:** Implement distinct event types with different characteristics (Nebulas, Comets, Supernovae).
+**Goal:** Implement distinct event types with different characteristics (Nebulas, Comets, Supernovae) in Unity world model.
 
 **Why:**
 - Creates strategic depth (different strategies for different types)
 - Aligns with design vision (README mentions event types)
 - Makes gameplay more interesting (risk/reward tradeoffs)
+- Foundation for ML-Agents environment
 
 **Current State:**
-- Python has 3 basic types: NOISE, MINOR_TRANSIENT, MAJOR_TRANSIENT
-- All events are essentially the same (just different values/probabilities)
-- No temporal structure or distinct behaviors
+- ✅ `FakeDataGenerator` generates events (all generic "Event" type)
+- ✅ `SpaceEvent` has `eventType` field (currently just "Event")
+- ⏳ No type differentiation yet
 
 **Implementation:**
 
-**Python Side (`python/silent_sky/env/events.py`):**
-- Add new event types: `NEBULA`, `COMET`, `SUPERNOVA`
-- **Nebulas:**
-  - Constant presence (always observable)
-  - Lower value, low risk
-  - Steady income stream
-  - No decay (always there)
+**Unity Side (`unity/Silent Sky/Assets/Scripts/Environment/`):**
+- Update `FakeDataGenerator.cs`:
+  - Generate different event types with distinct characteristics
+  - **Nebulas**: Constant presence (always active), lower value, no timestamp/duration limits
+  - **Comets**: Cyclical timing patterns, moderate value, predictable windows
+  - **Supernovae**: Random occurrence, high value, short duration
   
-- **Comets:**
-  - Cyclical timing patterns
-  - Predictable appearance windows
-  - Moderate value
-  - Can learn cycles
+- Update `SpaceEvent.cs`:
+  - Add type-specific behaviors (IsActive logic per type)
+  - Support constant presence for nebulas
+  - Support cyclical patterns for comets
   
-- **Supernovae:**
-  - Random occurrence (unpredictable)
-  - Very high value
-  - High risk/high reward
-  - Rare but exciting
+- Update `EventVisualizer.cs`:
+  - Visual differentiation by type:
+    - Nebulas: Blue, constant glow
+    - Comets: Green, moving/trailing
+    - Supernovae: Red/Orange, bright flash
+  - Different rendering based on type
 
-- Add temporal structure:
-  - Shortened year cycle (~20 nights/year)
-  - Each episode = one year
-  - Events follow yearly patterns
+- Update `SignalCalculator.cs`:
+  - Handle type-specific signal contributions
+  - Nebulas contribute constant baseline signal
 
-- Update event generation:
-  - Different generation logic per type
-  - Temporal clustering for comets
-  - Random distribution for supernovae
-  - Constant presence for nebulas
+**Future (ML-Agents):**
+- Event types will be part of ground truth state
+- Agent will learn to recognize patterns per type
+- Type-specific reward values
 
-**Unity Side:**
-- Visual differentiation:
-  - Different colors/shapes for each event type
-  - Nebulas: Blue, constant glow
-  - Comets: Green, moving/trailing
-  - Supernovae: Red/Orange, bright flash
-  
-- UI indicators:
-  - Event type labels
-  - Temporal predictions (for comets)
-  - Value indicators
-
-**Estimated Effort:** Medium-High (3-4 days)
+**Estimated Effort:** Medium (2-3 days)
 
 ---
 
@@ -155,33 +146,41 @@
 
 ---
 
-### 4. Python-Unity Bridge (Medium Priority) 🔌
+### 4. ML-Agents Integration (High Priority) 🤖
 
-**Goal:** Get real ZeroMQ communication working (currently using mock data).
+**Goal:** Integrate Unity ML-Agents framework and connect Python training.
 
 **Why:**
-- Enables live Python-Unity integration
-- Allows testing with real environment
-- Prepares for RL training visualization
+- Required for RL training (architecture decision)
+- ML-Agents handles communication automatically
+- Single source of truth in Unity eliminates sync issues
 
 **Current State:**
-- Python side: `zmq_bridge.py` exists and appears functional
-- Unity side: `ZMQBridge.cs` uses mock data mode
-- NetMQ packages removed (commented out)
+- ✅ World model foundation exists in Unity
+- ⏳ ML-Agents package not installed
+- ⏳ No Academy/Agent structure yet
 
 **Implementation:**
 - **Unity Side:**
-  - Re-add NetMQ packages (or find alternative)
-  - Implement real ZMQ subscriber
-  - Handle connection lifecycle
-  - Test with Python environment
+  - Install ML-Agents package via Package Manager
+  - Create `ObservatoryAcademy.cs` (inherits from Academy)
+  - Create `ObservatoryAgent.cs` (inherits from Agent)
+  - Port environment logic to ML-Agents structure:
+    - Event generation → Academy/Agent
+    - Sensor system → Agent observations
+    - Reward calculation → Agent rewards
+  - Implement POMDP observations (noisy sensor readings only)
+  - Configure BehaviorParameters for action/observation spaces
   
 - **Python Side:**
-  - Verify `zmq_bridge.py` works correctly
-  - Test state serialization/deserialization
-  - Ensure JSON format matches Unity expectations
+  - Install ML-Agents Python package (`mlagents`)
+  - Create training script that connects via ML-Agents Gym interface
+  - Use Stable-Baselines3 PPO with LSTM policy
+  - Test connection and training
 
-**Estimated Effort:** Low-Medium (1-2 days, depends on package issues)
+**Estimated Effort:** High (5-7 days)
+
+**Note:** This is the next major milestone. See `C:\Users\eam\.cursor\plans\unity_ml-agents_environment_implementation_76ba925e.plan.md` for detailed plan.
 
 ---
 
@@ -221,18 +220,21 @@
 
 ## Recommended Order
 
-1. **Sphere Rotation** (High impact, enables strategic gameplay)
-2. **Event Type Differentiation** (High impact, creates depth)
-3. **Enhanced Event Patterns** (Medium impact, improves learning)
-4. **Python-Unity Bridge** (Enables integration testing)
+1. **Fix Viewport Rotation Bugs** (High priority, current blocker)
+2. **Event Type Differentiation** (High impact, creates depth, foundation for ML-Agents)
+3. **ML-Agents Integration** (Required for RL training, major milestone)
+4. **Enhanced Event Patterns** (Medium impact, improves learning)
 5. **Visual Polish** (Ongoing, as needed)
+
+**Note:** Python-Unity Bridge (ZMQ) is deprecated - will be replaced by ML-Agents communication.
 
 ## Notes
 
-- **Defer RL:** All steps above can be done without RL agent
-- **Python Focus:** Steps 2, 3, 4 are primarily Python work
-- **Unity Focus:** Steps 1, 5 are primarily Unity work
-- **Integration:** Step 4 enables testing Python changes in Unity
+- **Architecture:** Unity is authoritative (ML-Agents), Python is training-only
+- **Unity Focus:** Steps 1, 2, 3 are primarily Unity work
+- **Python Focus:** Step 3 (ML-Agents) requires Python training code
+- **Integration:** ML-Agents handles communication automatically (no ZMQ needed)
+- **Legacy:** Python environment code exists but is deprecated (reference only)
 
 ## Questions to Consider
 

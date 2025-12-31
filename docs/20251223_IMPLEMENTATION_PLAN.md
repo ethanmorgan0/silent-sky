@@ -45,13 +45,17 @@
 
 ## Architecture Overview
 
+**IMPORTANT: Architecture has changed to Unity ML-Agents**
+
 The MVP implements a space observatory POMDP where:
 
-- **Python** is the authoritative environment (Gymnasium-compatible)
-- **Unity** visualizes state and supports live training + episode playback
-- **ZeroMQ** handles Python ↔ Unity communication
-- **Phase 1**: Dummy agent (simple heuristic)
-- **Phase 2**: Stable-Baselines3 PPO with recurrent policies
+- **Unity** is the authoritative environment (ML-Agents)
+- **Python** connects via ML-Agents Gym interface for training only
+- **ML-Agents** handles communication automatically (replaces ZeroMQ)
+- **Phase 1**: Foundation in Unity (world model, visualization)
+- **Phase 2**: ML-Agents integration + Python training (Stable-Baselines3 PPO with recurrent policies)
+
+**See `docs/ARCHITECTURE.md` for current architecture details.**
 ```mermaid
 graph TB
     PythonEnv[Python Environment<br/>Gymnasium Interface] -->|Observations| Agent[Agent<br/>Phase 1: Dummy<br/>Phase 2: PPO LSTM]

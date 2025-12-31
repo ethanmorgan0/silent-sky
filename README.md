@@ -152,51 +152,68 @@ The policy system should be reactive to different event types with distinct char
 
 ## Technical Architecture
 
+**IMPORTANT: Architecture has changed to Unity ML-Agents**
+
+**Unity is the authoritative environment** - all world model logic runs in Unity C#. Python connects via ML-Agents Gym interface for training only.
+
 ### System Components
 
 ```
-Python (Authoritative)          Unity (Visualization)
-├── Environment (Gym)           ├── Sector Map
-├── Event Generation            ├── Event Visualizer
-├── Sensor System               ├── Agent State UI
-├── Reward System               ├── Uncertainty Display
-├── Upgrade System              ├── Episode Player
-├── PPO Agent (LSTM)           ├── Mission Directives UI
-└── ZeroMQ Bridge ←──────────→ └── Upgrade Shop
-                                    └── Emergency Override
+Unity (Authoritative Environment)        Python (Training Only)
+├── Environment Logic (C#)               ├── Stable-Baselines3 PPO
+│   ├── Event Generation                 │   ├── LSTM Policy
+│   ├── Sensor System                    │   └── Training Pipeline
+│   ├── Reward Calculation               └── ML-Agents Gym Interface
+│   └── State Management                     (connects to Unity)
+├── ML-Agents Academy/Agent
+│   └── Gym Interface (auto-exposed)
+└── Visualization
+    ├── Sector Map (19 hexagons)
+    ├── Event Visualizer
+    ├── Starfield Background
+    └── Signal Visualization
 ```
 
-### Python Environment
+**See `docs/ARCHITECTURE.md` for full architecture details.**
 
-- **Gymnasium-compatible interface**: Standard RL environment
-- **Discrete action space**: Discrete sector selection + discrete exposure mode (SHORT/MEDIUM/LONG)
-- **POMDP observation space**: Only noisy sensor readings, uncertainty, time remaining, and resource state (no belief state leakage)
+### Unity Environment (ML-Agents)
+
+- **ML-Agents framework**: Unity is the authoritative environment
+- **Discrete action space**: Discrete sector selection (0-18) + discrete exposure mode (SHORT/MEDIUM/LONG) - future
+- **POMDP observation space**: Only noisy sensor readings, sensor confidence, time remaining, and budget (no belief state leakage)
 - **Reward system**: Rewards map to economic outcomes but agent never sees money directly
 - **Deterministic seeding**: Full reproducibility and replay support
-- **Headless operation**: Can run without Unity for training
+- **Headless training**: Can run Unity in batch mode for training
 
-### Agent Training
+**Current Status:** Foundation implemented (FakeDataGenerator, SignalCalculator), ML-Agents integration in progress.
 
-- **Stable-Baselines3 PPO** with LSTM policy
+### Agent Training (Future)
+
+- **Stable-Baselines3 PPO** with LSTM policy (via ML-Agents Gym interface)
 - **Recurrent network**: Maintains pattern memory across episode
 - **Episode-based training**: Train between episodes, not frame-by-frame
 - **Pretraining**: Base policy pretrained on diverse pattern seeds for general competence
 - **Fine-tuning**: Supports player preference adaptation
 - **Non-repetitive training**: Curriculum with diverse pattern seeds prevents memorization
 
+**Status:** Not yet implemented - requires ML-Agents integration first.
+
 ### Unity Client
 
-- **Visualization only**: Mirrors environment state from Python
-- **Live training view**: Watch agent operate in real-time
-- **Episode playback**: Review past episodes with full ground truth reveal
-- **Player interaction**: Mission directives, upgrade purchases, emergency overrides
-- **Financial tracking**: Budget meters, revenue displays, ROI analysis
+- **Authoritative environment**: All world model logic runs in Unity
+- **Visualization**: Real-time visualization of environment state
+- **Live training view**: Watch agent operate in real-time (future)
+- **Episode playback**: Review past episodes with full ground truth reveal (future)
+- **Player interaction**: Mission directives, upgrade purchases (future)
+- **Financial tracking**: Budget meters, revenue displays, ROI analysis (future)
 
 ### Communication
 
-- **ZeroMQ**: PUB/SUB for Python → Unity (state updates), REQ/REP for Unity → Python (directives)
-- **JSON serialization**: State snapshots and message format
-- **Connection lifecycle**: Handles reconnection and error recovery
+- **ML-Agents**: Automatic communication between Unity and Python
+- **Gym interface**: Python connects via `gym.make()` with ML-Agents environment
+- **No ZMQ needed**: ML-Agents handles all communication
+
+**Status:** ML-Agents integration in progress. Current implementation uses mock data.
 
 ## Gameplay Loop
 
